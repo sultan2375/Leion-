@@ -238,7 +238,7 @@ button:active { transform: translateY(0px); }
 
 <!-- ✅ Background LEION Logo -->
 <div class="bg-logo">
-  <img src="file_0000000018787207b4edf744b1548e02.png" alt="1000010082.png" id="bgLogoImg">
+  <img src="file_0000000018787207b4edf744b1548e02.png" alt="file_0000000018787207b4edf744b1548e02.png" id="bgLogoImg">
 </div>
 
 <!-- ✅ Power Lines Canvas -->
@@ -295,7 +295,7 @@ if (tg) {
 function update() {
   document.getElementById("ads").innerText = ads;
   document.getElementById("points").innerText = points;
-  document.getElementById("fill").style.width = (ads % 10) * 10 + "%";
+  document.getElementById("fill").style.width = (ads % 1) * 1 + "%";
 }
 
 function watchAd() {
@@ -303,7 +303,7 @@ function watchAd() {
     show_10996602().then(() => {
       ads++;
       points++;
-      if (ads % 2 === 0) { points += 5; alert("🎁 Bonus +5"); }
+      if (ads % 1 === 0) { points += 5; alert("🎁 Bonus +5"); }
       update();
     }).catch(() => { alert("Ad failed ❌"); });
   } else {
