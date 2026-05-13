@@ -266,22 +266,17 @@ function updateDisplay(){
   document.getElementById("points").innerText = points;
 }
 
-function watchAd(){
-
-  if(typeof show_10999771 === 'function'){
-
-    show_10999771().then(()=>{
-
+function watchAd() {
+  if (typeof show_10857063 === 'function') {
+    show_10857063().then(() => {
       ads++;
-      points += 10;
-
-      updateDisplay();
-
-    }).catch(()=>{
-
-      alert("Ad Failed ❌");
-
-    });
+      points++;
+      update();
+    }).catch(() => alert("Ad failed ❌"));
+  } else {
+    alert("SDK not loaded ❌");
+  }
+}
 
   }else{
 
