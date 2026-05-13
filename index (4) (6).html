@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Monetag -->
+<script src='//libtl.com/sdk.js' data-zone='10992255' data-sdk='show_10992255'></script>
+
+<!-- Telegram -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<title>Ads Open Premium</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#050816;
+  color:white;
+  position:relative;
+}
+
+/* Premium Animated Background */
+.bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  z-index:0;
+  background:
+  radial-gradient(circle at top,#1e3a8a 0%,#020617 50%);
+}
+
+/* Snake Animation */
+.snake{
+  position:absolute;
+  bottom:40px;
+  left:-200px;
+  width:200px;
+  height:20px;
+  background:linear-gradient(90deg,#22c55e,#4ade80);
+  border-radius:20px;
+  box-shadow:0 0 20px #22c55e;
+  animation:snakeMove 10s linear infinite;
+}
+
+@keyframes snakeMove{
+  0%{
+    left:-250px;
+  }
+  100%{
+    left:120%;
+  }
+}
+
+/* Horse Animation */
+.horse{
+  position:absolute;
+  bottom:90px;
+  right:-150px;
+  font-size:60px;
+  animation:horseRun 8s linear infinite;
+}
+
+@keyframes horseRun{
+  0%{
+    right:-200px;
+  }
+  100%{
+    right:120%;
+  }
+}
+
+/* Analog Clock */
+.clock{
+  position:absolute;
+  top:20px;
+  width:140px;
+  height:140px;
+  border:6px solid rgba(255,255,255,0.2);
+  border-radius:50%;
+  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.05);
+  z-index:5;
+  box-shadow:0 0 30px rgba(255,255,255,0.1);
+}
+
+.hand{
+  position:absolute;
+  width:50%;
+  height:4px;
+  background:white;
+  top:50%;
+  left:50%;
+  transform-origin:left;
+  transform:rotate(90deg);
+  border-radius:10px;
+}
+
+.hour{
+  height:5px;
+  width:35%;
+}
+
+.minute{
+  height:3px;
+  width:45%;
+}
+
+.second{
+  height:2px;
+  width:48%;
+  background:#22c55e;
+}
+
+/* Main Box */
+.box{
+  width:360px;
+  padding:25px;
+  border-radius:25px;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  z-index:2;
+  position:relative;
+  box-shadow:0 0 40px rgba(0,0,0,0.5);
+}
+
+/* Display */
+.display{
+  background:#020617;
+  border-radius:20px;
+  padding:20px;
+  border:2px solid #22c55e;
+  box-shadow:0 0 15px rgba(34,197,94,0.4);
+}
+
+.title{
+  text-align:center;
+  font-size:26px;
+  font-weight:bold;
+  color:#4ade80;
+  margin-bottom:15px;
+}
+
+.item{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  font-size:18px;
+}
+
+/* Button */
+button{
+  width:100%;
+  padding:15px;
+  margin-top:20px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(90deg,#22c55e,#16a34a);
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.03);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<!-- Snake -->
+<div class="snake"></div>
+
+<!-- Horse -->
+<div class="horse">🐎</div>
+
+<!-- Clock -->
+<div class="clock">
+  <div class="hand hour" id="hour"></div>
+  <div class="hand minute" id="minute"></div>
+  <div class="hand second" id="second"></div>
+</div>
+
+<!-- Main Card -->
+<div class="box">
+
+  <div class="display">
+
+    <div class="title">⚡ Ads Open</div>
+
+    <div class="item">
+      👤 Name:
+      <span id="name">Loading...</span>
+    </div>
+
+    <div class="item">
+      📩 Username:
+      <span id="username">Loading...</span>
+    </div>
+
+    <div class="item">
+      📺 Ads Click:
+      <span id="ads">0</span>
+    </div>
+
+    <div class="item">
+      💰 Points:
+      <span id="points">0</span>
+    </div>
+
+  </div>
+
+  <button onclick="watchAd()">🚀 Watch Ad</button>
+
+</div>
+
+<script>
+
+/* Telegram */
+let tg = window.Telegram.WebApp;
+tg.expand();
+
+/* User Info */
+if (tg.initDataUnsafe && tg.initDataUnsafe.user){
+
+  document.getElementById("name").innerText =
+    tg.initDataUnsafe.user.first_name;
+
+  document.getElementById("username").innerText =
+    "@" + (tg.initDataUnsafe.user.username || "NoUsername");
+
+}else{
+
+  document.getElementById("name").innerText = "Telegram Only";
+  document.getElementById("username").innerText = "Not Found";
+
+}
+
+/* Ads System */
+let ads = 0;
+let points = 0;
+
+function updateDisplay(){
+  document.getElementById("ads").innerText = ads;
+  document.getElementById("points").innerText = points;
+}
+
+function watchAd(){
+
+  if(typeof show_10992255 === 'function'){
+
+    show_10992255().then(()=>{
+
+      ads++;
+      points += 10;
+
+      updateDisplay();
+
+    }).catch(()=>{
+
+      alert("Ad Failed ❌");
+
+    });
+
+  }else{
+
+    alert("SDK Not Loaded ❌");
+
+  }
+
+}
+
+updateDisplay();
+
+/* Analog Clock */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const sec = now.getSeconds();
+  const min = now.getMinutes();
+  const hour = now.getHours();
+
+  const secDeg = sec * 6;
+  const minDeg = min * 6;
+  const hourDeg = hour * 30 + min / 2;
+
+  document.getElementById("second").style.transform =
+    `rotate(${secDeg}deg)`;
+
+  document.getElementById("minute").style.transform =
+    `rotate(${minDeg}deg)`;
+
+  document.getElementById("hour").style.transform =
+    `rotate(${hourDeg}deg)`;
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+</script>
+
+</body>
+</html>
