@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ✅ Monetag SDK (FIXED HTTPS) -->
-<script src='//libtl.com/sdk.js' data-zone='10996602' data-sdk='show_10996602'></script>
+<script src='//libtl.com/sdk.js' data-zone='10857063' data-sdk='show_10857063'></script>
 
 <!-- ✅ Telegram WebApp -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -299,13 +299,12 @@ function update() {
 }
 
 function watchAd() {
-  if (typeof show_10996602 === 'function') {
-    show_10996602().then(() => {
+  if (typeof show_10857063 === 'function') {
+    show_10857063().then(() => {
       ads++;
       points++;
-      if (ads % 1 === 0) { points += 5; alert("🎁 Bonus +5"); }
       update();
-    }).catch(() => { alert("Ad failed ❌"); });
+    }).catch(() => alert("Ad failed ❌"));
   } else {
     alert("SDK not loaded ❌");
   }
